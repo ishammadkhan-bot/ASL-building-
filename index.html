@@ -1,34 +1,1274 @@
-<!-- CSS -->
-<link rel="stylesheet" href="assets/css/styles.css">
-
-<!-- JS -->
-<script src="assets/js/script.js" defer></script>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 <title>Athlete Sports Lab — Building Athletes. Building Champions.</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<link rel="stylesheet" href="assets/css/styles.css">
-<script src="assets/js/script.js" defer></script>
+  :root {
+    --black: #080808;
+    --white: #f4f3ef;
+    --orange: #ff5c1a;
+    --orange-dim: #cc4612;
+    --gray-900: #111111;
+    --gray-800: #1a1a1a;
+    --gray-700: #2a2a2a;
+    --gray-500: #555550;
+    --gray-400: #888880;
+    --gray-200: #c8c7c0;
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 4px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 5vw;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+
+  .nav-logo-main {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+
+  .nav-logo-badge {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--orange);
+    text-transform: uppercase;
+    background: rgba(255,92,26,0.12);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid rgba(255,92,26,0.3);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--orange) !important;
+    color: var(--white) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 3px;
+    font-size: 0.85rem !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--orange-dim) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 5vw 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* basketball court lines in background */
+  .hero-court {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+
+  .hero-court::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.5);
+    opacity: 0.3;
+  }
+
+  /* big number bg */
+  .hero-bignum {
+    position: absolute;
+    right: -2vw;
+    bottom: 3rem;
+    font-family: var(--font-display);
+    font-size: clamp(200px, 35vw, 500px);
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(255,255,255,0.025);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.5s ease 0.1s both;
+  }
+
+  .hero-eyebrow-line {
+    width: 40px; height: 2px;
+    background: var(--orange);
+  }
+
+  .hero-eyebrow-text {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 12vw, 11rem);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--white);
+    position: relative; z-index: 1;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+
+  .hero h1 .highlight {
+    color: var(--orange);
+    font-style: italic;
+  }
+
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 3rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.6s ease 0.4s both;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+  }
+
+  .hero-tagline strong { color: var(--white); }
+
+  .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--orange);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--orange-dim); transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-outline:hover { border-color: var(--white); transform: translateY(-2px); }
+
+  /* hero stats ticker */
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    padding: 2rem 5vw;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,92,26,0.04);
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .hero-stat-num {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+  }
+
+  /* ── SECTION COMMONS ── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 28px; height: 2px;
+    background: var(--orange);
+    flex-shrink: 0;
+  }
+
+  .section-label span {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  /* ── WHY ASL ── */
+  .why {
+    padding: 7rem 5vw;
+    background: var(--gray-900);
+  }
+
+  .why-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .why h2 {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--white);
+  }
+
+  .why h2 em {
+    font-style: italic;
+    color: var(--orange);
+  }
+
+  .why-right p {
+    font-size: 1rem;
+    color: var(--gray-200);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .why-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--gray-700);
+    margin-top: 3rem;
+    border: 1px solid var(--gray-700);
+  }
+
+  .why-card {
+    background: var(--gray-900);
+    padding: 1.75rem 1.5rem;
+    transition: background 0.2s;
+  }
+
+  .why-card:hover { background: var(--gray-800); }
+
+  .why-card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .why-card h4 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .why-card p {
+    font-size: 0.85rem;
+    color: var(--gray-400);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    padding: 7rem 5vw;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about::before {
+    content: 'ASL';
+    position: absolute;
+    right: -0.05em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: clamp(150px, 25vw, 380px);
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(255,255,255,0.02);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .about-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    position: relative; z-index: 1;
+  }
+
+  .about h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 2rem;
+  }
+
+  .about h2 em { font-style: italic; color: var(--orange); }
+
+  .about-desc {
+    font-size: 1rem;
+    color: var(--gray-200);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-mission {
+    border-left: 3px solid var(--orange);
+    padding-left: 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .about-mission p {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--gray-200);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+
+  .about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .astat {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.25rem;
+  }
+
+  .astat-num {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .astat-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-top: 0.25rem;
+  }
+
+  /* ── PROGRAMS ── */
+  .programs {
+    padding: 7rem 5vw;
+    background: var(--gray-900);
+  }
+
+  .programs-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3.5rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .programs-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: var(--white);
+  }
+
+  .programs-header h2 em { font-style: italic; color: var(--orange); }
+
+  .programs-header p {
+    font-size: 0.95rem;
+    color: var(--gray-400);
+    max-width: 35ch;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .prog-card {
+    background: var(--gray-800);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s;
+    position: relative;
+  }
+
+  .prog-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,92,26,0.3);
+  }
+
+  .prog-card-top {
+    padding: 2rem;
+    position: relative;
+  }
+
+  .prog-card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .prog-card:hover .prog-card-accent { transform: scaleX(1); }
+
+  .prog-icon {
+    width: 48px; height: 48px;
+    border-radius: 6px;
+    background: rgba(255,92,26,0.12);
+    border: 1px solid rgba(255,92,26,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prog-num {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .prog-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+
+  .prog-card p {
+    font-size: 0.875rem;
+    color: var(--gray-400);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .prog-card-bottom {
+    padding: 1rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .prog-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(255,92,26,0.1);
+    border: 1px solid rgba(255,92,26,0.2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  /* ── BENEFITS ── */
+  .benefits {
+    padding: 7rem 5vw;
+    background: var(--orange);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .benefits::before {
+    content: '';
+    position: absolute;
+    right: -10%;
+    top: -30%;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    border: 80px solid rgba(0,0,0,0.07);
+    pointer-events: none;
+  }
+
+  .benefits-inner {
+    position: relative; z-index: 1;
+  }
+
+  .benefits .section-label::before { background: var(--black); }
+  .benefits .section-label span { color: var(--black); }
+
+  .benefits h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: var(--black);
+    margin-bottom: 4rem;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .benefit-item {
+    border-top: 2px solid rgba(0,0,0,0.2);
+    padding-top: 1.5rem;
+  }
+
+  .benefit-item-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--black);
+    line-height: 1;
+    opacity: 0.15;
+    letter-spacing: -0.02em;
+  }
+
+  .benefit-item h4 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--black);
+    margin: 0.5rem 0 0.5rem;
+  }
+
+  .benefit-item p {
+    font-size: 0.875rem;
+    color: rgba(0,0,0,0.65);
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    padding: 7rem 5vw;
+    background: var(--black);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .contact-left h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-left h2 em { font-style: italic; color: var(--orange); }
+
+  .contact-left p {
+    font-size: 0.95rem;
+    color: var(--gray-400);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-details { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .contact-row-icon {
+    width: 40px; height: 40px;
+    border-radius: 6px;
+    background: rgba(255,92,26,0.1);
+    border: 1px solid rgba(255,92,26,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-row-text .label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+
+  .contact-row-text .val {
+    font-size: 0.95rem;
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .form-group label {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--gray-900);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 3px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--gray-500); font-weight: 300; }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--orange); }
+
+  .form-group select option { background: var(--gray-900); }
+
+  .btn-submit {
+    background: var(--orange);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    width: fit-content;
+    margin-top: 0.5rem;
+  }
+
+  .btn-submit:hover { background: var(--orange-dim); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--gray-900);
+    padding: 2.5rem 5vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .footer-logo span { color: var(--orange); }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--white); }
+
+  .footer-copy {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+  }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: var(--orange);
+    overflow: hidden;
+    padding: 0.6rem 0;
+    white-space: nowrap;
+  }
+
+  .ticker-track {
+    display: inline-flex;
+    animation: ticker 22s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--black);
+    padding: 0 3rem;
+  }
+
+  .ticker-dot {
+    color: rgba(0,0,0,0.35);
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .why-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .programs-grid { grid-template-columns: 1fr; }
+    .benefits-grid { grid-template-columns: 1fr 1fr; }
+    .contact { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero-bignum { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .benefits-grid { grid-template-columns: 1fr; }
+    .why-cards { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
-<script type="text/javascript">
-    (function (l) {
-      if (l.search[1] === "/") {
-        var decoded = l.search
-          .slice(1)
-          .split("&")
-          .map(function (s) {
-            return s.replace(/~and~/g, "&");
-          })
-          .join("?");
-        window.history.replaceState(
-          null,
-          null,
-          l.pathname.slice(0, -1) + decoded + l.hash
-        );
-      }
-    })(window.location);
-  </script>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <span class="nav-logo-main">Athlete Sports Lab</span>
+    <span class="nav-logo-badge">ASL</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#why">Why ASL</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#benefits">Benefits</a></li>
+    <li><a href="#contact" class="nav-cta">Join Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-court" aria-hidden="true"></div>
+  <div class="hero-bignum" aria-hidden="true">ASL</div>
+
+  <div class="hero-eyebrow">
+    <div class="hero-eyebrow-line"></div>
+    <span class="hero-eyebrow-text">Sports Development · Basketball · Schools</span>
+  </div>
+
+  <h1>
+    Building<br/>
+    <span class="highlight">Athletes.</span><br/>
+    Building<br/>
+    Champions.
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-tagline">
+      <strong>Athlete Sports Lab</strong> — Structured basketball programs<br/>built inside school ecosystems.
+    </p>
+    <div class="hero-actions">
+      <a href="#programs" class="btn-primary">Our Programs ↓</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS TICKER -->
+<div class="hero-stats">
+  <div class="hero-stat">
+    <span class="hero-stat-num">500+</span>
+    <span class="hero-stat-label">Athletes Trained</span>
+  </div>
+  <div class="hero-stat">
+    <span class="hero-stat-num">25+</span>
+    <span class="hero-stat-label">School Partners</span>
+  </div>
+  <div class="hero-stat">
+    <span class="hero-stat-num">10+</span>
+    <span class="hero-stat-label">Active Programs</span>
+  </div>
+  <div class="hero-stat">
+    <span class="hero-stat-num">100%</span>
+    <span class="hero-stat-label">Youth Focused</span>
+  </div>
+</div>
+
+<!-- TICKER TAPE -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">Athlete Sports Lab <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Building Champions <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Basketball Programs <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">School Ecosystems <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Youth Development <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Performance Driven <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Athlete Sports Lab <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Building Champions <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Basketball Programs <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">School Ecosystems <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Youth Development <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Performance Driven <span class="ticker-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- WHY ASL -->
+<section class="why" id="why">
+  <div class="why-inner">
+    <div>
+      <div class="section-label"><span>Why ASL</span></div>
+      <h2>More Than<br/>A <em>Game.</em></h2>
+    </div>
+    <div>
+      <div class="why-right">
+        <p>Most young athletes never get access to structured, professional-level training. They practice without a system, compete without a foundation, and grow without a plan. ASL changes that.</p>
+        <p>We bring the structure, discipline, and vision of elite sports development directly into schools — making world-class basketball programs accessible to every student athlete.</p>
+      </div>
+      <div class="why-cards">
+        <div class="why-card">
+          <div class="why-card-icon">🏀</div>
+          <h4>School-Integrated</h4>
+          <p>Programs designed to work within school schedules, facilities, and communities — no friction, pure impact.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">📈</div>
+          <h4>Structured Growth</h4>
+          <p>Every athlete follows a clear development pathway — from fundamentals to competitive performance.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">🎯</div>
+          <h4>Performance-First</h4>
+          <p>We train with purpose. Every drill, every rep, every session is designed to build real basketball ability.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">🤝</div>
+          <h4>Youth-Centered</h4>
+          <p>We understand young athletes. Our coaches build confidence, character, and community alongside skill.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div>
+      <div class="section-label"><span>About ASL</span></div>
+      <h2>We Are<br/><em>Athlete</em><br/>Sports Lab.</h2>
+      <p class="about-desc">Athlete Sports Lab (ASL) is a sports development organization with a singular mission: build structured basketball programs inside school ecosystems that develop not just players — but champions in the truest sense.</p>
+      <p class="about-desc">We are modern, performance-driven, and relentlessly youth-focused. ASL exists at the intersection of elite coaching, institutional structure, and grassroots passion.</p>
+      <div class="about-mission">
+        <p>"We don't just train athletes. We build a culture where young people believe in their potential and work to realize it — on and off the court."</p>
+      </div>
+      <a href="#programs" class="btn-primary" style="margin-top: 1.5rem; display: inline-block;">Explore Programs</a>
+    </div>
+    <div class="about-stats">
+      <div class="astat">
+        <div class="astat-num">500+</div>
+        <div class="astat-label">Young athletes developed</div>
+      </div>
+      <div class="astat">
+        <div class="astat-num">25+</div>
+        <div class="astat-label">School partnerships active</div>
+      </div>
+      <div class="astat">
+        <div class="astat-num">3×</div>
+        <div class="astat-label">Faster skill progression vs. traditional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section class="programs" id="programs">
+  <div class="programs-header">
+    <div>
+      <div class="section-label"><span>Programs</span></div>
+      <h2>Train Like<br/><em>Champions.</em></h2>
+    </div>
+    <p>Every ASL program is purpose-built for a different stage of the athletic journey — from first dribble to competitive play.</p>
+  </div>
+  <div class="programs-grid">
+    <div class="prog-card">
+      <div class="prog-card-accent"></div>
+      <div class="prog-card-top">
+        <div class="prog-icon">🏀</div>
+        <div class="prog-num">Program 01</div>
+        <h3>Foundation Academy</h3>
+        <p>Introductory basketball for ages 8–12. Builds core skills — dribbling, passing, footwork — with a heavy emphasis on fun and confidence.</p>
+      </div>
+      <div class="prog-card-bottom">
+        <span class="prog-tag">Ages 8–12</span>
+        <span class="prog-tag">In-School</span>
+      </div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-accent"></div>
+      <div class="prog-card-top">
+        <div class="prog-icon">⚡</div>
+        <div class="prog-num">Program 02</div>
+        <h3>Elite Development</h3>
+        <p>Intermediate training for ages 12–16. Tactical coaching, team concepts, game IQ, and structured competitive play in school leagues.</p>
+      </div>
+      <div class="prog-card-bottom">
+        <span class="prog-tag">Ages 12–16</span>
+        <span class="prog-tag">Competitive</span>
+      </div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-accent"></div>
+      <div class="prog-card-top">
+        <div class="prog-icon">🏆</div>
+        <div class="prog-num">Program 03</div>
+        <h3>Champions Track</h3>
+        <p>High-performance program for serious athletes 16+. Advanced training, tournament participation, and college/career pathway guidance.</p>
+      </div>
+      <div class="prog-card-bottom">
+        <span class="prog-tag">Ages 16+</span>
+        <span class="prog-tag">Elite</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits" id="benefits">
+  <div class="benefits-inner">
+    <div class="section-label"><span>Benefits</span></div>
+    <h2>What ASL<br/>Delivers.</h2>
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-item-num">01</div>
+        <h4>Structured Curriculum</h4>
+        <p>A professional development pathway from beginner to advanced — every session has purpose and progression.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-item-num">02</div>
+        <h4>Certified Coaches</h4>
+        <p>Trained, passionate coaches who understand both basketball and youth development at the highest level.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-item-num">03</div>
+        <h4>School Integration</h4>
+        <p>Seamlessly embedded into your school — no disruption, just enrichment that complements academics.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-item-num">04</div>
+        <h4>Community & Culture</h4>
+        <p>More than sport — ASL builds teams, friendships, leadership, and a culture students carry for life.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <div class="section-label"><span>Contact</span></div>
+    <h2>Let's Build<br/><em>Champions</em><br/>Together.</h2>
+    <p>Whether you're a school, parent, or athlete — reach out to learn how ASL can bring structured basketball to your community.</p>
+    <div class="contact-details">
+      <div class="contact-row">
+        <div class="contact-row-icon">📞</div>
+        <div class="contact-row-text">
+          <div class="label">Phone</div>
+          <div class="val">+91 98676 75739</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-icon">✉️</div>
+        <div class="contact-row-text">
+          <div class="label">Email</div>
+          <div class="val">athletesportslab@gmail.com</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-icon">📸</div>
+        <div class="contact-row-text">
+          <div class="label">Instagram</div>
+          <div class="val">@athletesportslab.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="contact-form" onsubmit="handleSubmit(event)">
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="Arjun" required />
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Sharma" required />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" placeholder="arjun@school.edu" required />
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="tel" placeholder="+91 00000 00000" />
+    </div>
+    <div class="form-group">
+      <label>I am a…</label>
+      <select>
+        <option value="">Select your role</option>
+        <option>School Administrator</option>
+        <option>Coach / Sports Teacher</option>
+        <option>Parent</option>
+        <option>Student Athlete</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Interested Program</label>
+      <select>
+        <option value="">Select a program</option>
+        <option>Foundation Academy (Ages 8–12)</option>
+        <option>Elite Development (Ages 12–16)</option>
+        <option>Champions Track (Ages 16+)</option>
+        <option>School Partnership</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea rows="4" placeholder="Tell us about your school or your athlete…"></textarea>
+    </div>
+    <button type="submit" class="btn-submit" id="submit-btn">Send Message →</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Athlete <span>Sports Lab</span></div>
+  <ul class="footer-links">
+    <li><a href="#why">Why ASL</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#benefits">Benefits</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 Athlete Sports Lab. All rights reserved.</p>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  setTimeout(() => {
+    btn.textContent = 'Message Sent ✓';
+    e.target.reset();
+    setTimeout(() => {
+      btn.textContent = 'Send Message →';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }, 3000);
+  }, 1200);
+}
+</script>
+
+</body>
+</html>
